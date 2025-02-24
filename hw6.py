@@ -21,14 +21,12 @@ X = train_data.drop(columns=["SalePrice", "Id"])
 test_ids = test_data["Id"]
 test_features = test_data.drop(columns=["Id"])
 
-# Feature selection for numeric and categorical
 numeric_features = X.select_dtypes(include=["number"]).columns
 categorical_features = X.select_dtypes(include=["object"]).columns
 
 
 def feature_engineering(data):
     data = data.copy()
-    # Interaction terms: Create interaction features between existing features
     data['Overall_GrLivArea'] = data['OverallQual'] * data['GrLivArea']
     data['Overall_LotArea'] = data['OverallQual'] * data['LotArea']
     return data
@@ -65,14 +63,12 @@ preprocessor = ColumnTransformer(
     ]
 )
 
-# Splitting data into train and validation sets
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
 def evaluate_model(pipeline, X_valid, y_valid):
     y_pred = pipeline.predict(X_valid)
     return np.sqrt(mean_squared_error(y_valid, y_pred))
 
-# Define models
 models = {
     "Lasso": Lasso(alpha=0.001)
 }
